@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMQConfig {
+public class RabbitMQFanoutConfig {
 
     @Bean
     Queue marketingQueue() {
@@ -26,25 +26,25 @@ public class RabbitMQConfig {
         return new Queue("adminQueue", false);
     }
     @Bean
-    DirectExchange exchange() {
-        return new DirectExchange("direct-exchange");
+    FanoutExchange exchange() {
+        return new FanoutExchange("fanout-exchange");
     }
 
     @Bean
-    Binding marketingBinding(Queue marketingQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(marketingQueue).to(exchange).with("marketing");
-
-    }
-
-    @Bean
-    Binding financeBinding(Queue financeQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(financeQueue).to(exchange).with("finance");
+    Binding marketingBinding(Queue marketingQueue, FanoutExchange exchange) {
+        return BindingBuilder.bind(marketingQueue).to(exchange);
 
     }
 
     @Bean
-    Binding adminBinding(Queue adminQueue, DirectExchange exchange) {
-        return BindingBuilder.bind(adminQueue).to(exchange).with("admin");
+    Binding financeBinding(Queue financeQueue, FanoutExchange exchange) {
+        return BindingBuilder.bind(financeQueue).to(exchange);
+
+    }
+
+    @Bean
+    Binding adminBinding(Queue adminQueue, FanoutExchange exchange) {
+        return BindingBuilder.bind(adminQueue).to(exchange);
 
     }
 }

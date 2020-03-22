@@ -8,20 +8,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/example-rabbitmq/direct/")
-public class RabbitMQWebController {
+@RequestMapping(value = "/example-rabbitmq/fanout/")
+public class RabbitMQFanoutWebController {
 
     @Autowired
     private AmqpTemplate amqpTemplate;
     //this will send message to Rmq exchange
 
     @GetMapping(value = "/producer")
-    public String producer(@RequestParam("exchangeName") String exchange, @RequestParam("routingKey") String routingKey,
-                            @RequestParam("messageData") String messageData) {
+    public String producer(@RequestParam("exchangeName") String exchange, @RequestParam("messageData") String messageData) {
 
-        amqpTemplate.convertAndSend(exchange, routingKey, messageData);
+        amqpTemplate.convertAndSend(exchange, "", messageData);
 
-        return "Message sent to the RabbitMQ JavaInUse Successfully";
+        return "Message sent to the RabbitMQ FanOut Successfully";
     }
 
 }
